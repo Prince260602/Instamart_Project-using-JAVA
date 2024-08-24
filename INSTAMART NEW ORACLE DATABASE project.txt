@@ -1,0 +1,458 @@
+ORACLE DATABASE
+
+
+
+SQL>create user InstaMartDB identified by "oracle";
+
+User created.
+
+SQL> grant connect, resource to InstaMartDB;
+
+Grant succeeded.
+
+SQL connect
+
+Enter user-name: InstaMartDB
+
+Enter password:1998
+
+Connected.
+
+SQL> select table_name from user_taples,
+
+no rows selected
+
+
+CREATE TABLE role (id NUMBER(11) PRIMARY KEY,name VARCHAR2(255) NOT NULL,active CHAR(1) DEFAULT '1' NOT NULL);
+
+CREATE SEQUENCE role_seq START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER role_trigger BEFORE INSERT ON role FOR EACH ROW BEGIN
+    SELECT role_seq.NEXTVAL INTO :new.id FROM dual;
+END;
+/
+
+
+
+INSERT INTO role (name, active) VALUES ('Manager', '1');
+INSERT INTO role (name, active) VALUES ('Customer', '1');
+
+
+CREATE TABLE "user" (
+    id NUMBER(10) GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR2(30),
+    last_name VARCHAR2(30),
+    dob DATE,
+    age NUMBER(10),
+    contact_no VARCHAR2(15),
+    email VARCHAR2(30),
+    username VARCHAR2(50),
+    password VARCHAR2(50),
+    role_id NUMBER(10),
+    CONSTRAINT user_pk PRIMARY KEY (id),
+    CONSTRAINT user_fk_role_id FOREIGN KEY (role_id) REFERENCES role(id)
+);
+
+
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('David', 'Ross', TO_DATE('1985-02-24', 'YYYY-MM-DD'), 34, '9535476863', 'david12@gmail.com', 'david12@gmail.com', 'david12@gmail.com', 1);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Tina', 'Foster', TO_DATE('1973-06-08', 'YYYY-MM-DD'), 46, '7845547896', 'tina7@gmail.com', 'tina7@gmail.com', 'tina7@gmail.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Andy', 'Myers', TO_DATE('1978-02-24', 'YYYY-MM-DD'), 41, '8974563214', 'andy@redif.com', 'andy@redif.com', 'andy@redif.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Edward', 'Sanders', TO_DATE('1975-03-19', 'YYYY-MM-DD'), 44, '9874563214', 'edward123@gmail.com', 'edward123@gmail.com', 'edward123@gmail.com', 2);
+
+-- Inserting data into the user table without specifying the id column
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Jasmin', 'Castillo', TO_DATE('1988-12-12', 'YYYY-MM-DD'), 31, '7845412365', 'jasmin45@yahoo.com', 'jasmin45@yahoo.com', 'jasmin45@yahoo.com', 1);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Eliphaz', 'Alvarez', TO_DATE('1984-01-14', 'YYYY-MM-DD'), 35, '8523563214', 'eliphaz96@gmail.com', 'eliphaz96@gmail.com', 'eliphaz96@gmail.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Dylan', 'Ruiz', TO_DATE('1970-08-06', 'YYYY-MM-DD'), 49, '7525412365', 'dylan@gmail.com', 'dylan@gmail.com', 'dylan@gmail.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Sean', 'Mendoza', TO_DATE('1968-11-11', 'YYYY-MM-DD'), 51, '6589563214', 'sean45@gmail.com', 'sean45@gmail.com', 'sean45@gmail.com', 2);
+
+-- Inserting data into the user table without specifying the id column
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Vincent', 'Gray', TO_DATE('1969-05-19', 'YYYY-MM-DD'), 50, '7865412365', 'gray@gmail.com', 'gray@gmail.com', 'gray@gmail.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Xavier', 'Bennet', TO_DATE('1994-12-31', 'YYYY-MM-DD'), 25, '9876544381', 'bennet@redif.com', 'bennet@redif.com', 'bennet@redif.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Aana', 'James', TO_DATE('1988-01-17', 'YYYY-MM-DD'), 31, '8976544381', 'james@gmail.com', 'james@gmail.com', 'james@gmail.com', 2);
+
+INSERT INTO "user" (first_name, last_name, dob, age, contact_no, email, username, password, role_id)
+VALUES ('Eadmer', 'Wood', TO_DATE('1993-02-15', 'YYYY-MM-DD'), 26, '7896544381', 'wood@gmail.com', 'wood@gmail.com', 'wood@gmail.com', 2);
+
+
+CREATE TABLE address (
+    id NUMBER(11) PRIMARY KEY,
+    user_id NUMBER(10),
+    street VARCHAR2(45) NOT NULL,
+    city VARCHAR2(45) NOT NULL,
+    state VARCHAR2(45) NOT NULL,
+    country VARCHAR2(45) NOT NULL,
+    pincode NUMBER(11) NOT NULL,
+    CONSTRAINT address_fk_user_id FOREIGN KEY (user_id) REFERENCES "user"(id)
+);
+
+
+INSERT INTO address VALUES 
+(1, 1, '1st main', 'Bangalore', 'Karnataka', 'India', 577221),
+(2, 2, '2nd main', 'Chennai', 'Tamilnadu', 'India', 577001),
+(3, 3, '3rd main', 'Trivindrum', 'Kerala', 'India', 597201),
+(4, 4, '4th main', 'Chennai', 'Karnataka', 'India', 517208),
+(5, 5, '5th main', 'Bihar', 'Patna', 'India', 377201),
+(6, 6, '6th main', 'Bangalore', 'Karnataka', 'India', 587201),
+(7, 7, '7th main', 'Bangalore', 'Karnataka', 'India', 176201),
+(8, 8, '8th main', 'Hydrabad', 'AndraPradesh', 'India', 174201),
+(9, 9, '9th main', 'Bangalore', 'Karnataka', 'India', 677201),
+(10, 10, '10th main', 'Bangalore', 'Karnataka', 'India', 577201),
+(11, 11, '12st main', 'Belguam', 'Karnataka', 'India', 575631),
+(12, 12, '41nd main', 'Chennai', 'Tamilnadu', 'India', 582501),
+(13, 2, '15 Main', 'Chennai', 'TamilNadu', 'India', 577001),
+(14, 3, '15 Main', 'Chennai', 'TamilNadu', 'India', 577001);
+
+
+CREATE TABLE brand (
+  id NUMBER(11) GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR2(255),
+  PRIMARY KEY (id)
+);
+
+
+INSERT INTO brand (id,name) VALUES (1,'Bosch');
+INSERT INTO brand (id,name) VALUES (2,'Samsung');
+INSERT INTO brand (id,name) VALUES (3,'LG');
+INSERT INTO brand (id,name) VALUES (4,'Whirlpool');
+INSERT INTO brand (id,name) VALUES (5,'Onida');
+INSERT INTO brand (id,name) VALUES (6,'Stanley');
+INSERT INTO brand (id,name) VALUES (7,'Mintwud');
+INSERT INTO brand (id,name) VALUES (8,'Philips');
+
+CREATE TABLE material (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(255)
+);
+
+INSERT INTO material (id,name) VALUES (1,'Wood');
+INSERT INTO material (id,name) VALUES (2,'Steel');
+INSERT INTO material (id,name) VALUES (3,'Leather');
+INSERT INTO material (id,name) VALUES (4,'Metal');
+INSERT INTO material (id,name) VALUES (5,'Ceramic');
+INSERT INTO material (id,name) VALUES (6,'Glass');
+
+
+CREATE TABLE company (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  address VARCHAR2(255),
+  name VARCHAR2(255)
+);
+
+
+INSERT INTO company (id,address,name) VALUES (1,'H-9, Block B-1, Tughlaqabad Extension, Mohan Cooperative Industrial Estate, Tughlakabad, New Delhi, Delhi 110044','Cloudtail Pvt. Ltd.');
+INSERT INTO company (id,address,name) VALUES (2,'Kattoor Rd, P N Palayam, Coimbatore, Tamil Nadu 641037','Maark Grand');
+INSERT INTO company (id,address,name) VALUES (3,'290, Bharathiyar Rd, P N Palayam, Coimbatore, Tamil Nadu 641037','Marvel Furniture / Interiors');
+INSERT INTO company (id,address,name) VALUES (4,'Shop No.24, Kattoor Rd, P N Palayam, Coimbatore, Tamil Nadu 641037','Modern Commercial Kitchen Equipments');
+INSERT INTO company (id,address,name) VALUES (5,'700, Avinashi Rd, P N Palayam, Coimbatore, Tamil Nadu 641037','Royal Agencies');
+INSERT INTO company (id,address,name) VALUES (6,'No. 150-151, Bharathiyar Rd, NG Narayanasamy St, Siddhapudur, New Siddhapudur, Coimbatore, Tamil Nadu 641044','Bloom Electronics Private Limited');
+INSERT INTO company (id,address,name) VALUES (7,'10, Sathy Rd, C.K.Colony, B.K.R Nagar, Gandhipuram, Coimbatore, Tamil Nadu 641012','Securico Electronics I Ltd');
+INSERT INTO company (id,address,name) VALUES (8,'S-26, 2nd Floor, No 61-71, Brooke Fields Plaza, Dr Krishnasamy Mudaliyar Rd, Coimbatore, Tamil Nadu 641001','Reliance Digital');
+
+
+CREATE TABLE catalog_service_sector (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(255)
+);
+
+INSERT INTO catalog_service_sector (id,name) VALUES (1,'Home');
+INSERT INTO catalog_service_sector (id,name) VALUES (2,'Office');
+
+CREATE TABLE catalog_service_area (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  category VARCHAR2(255),
+  catalog_service_sector_id NUMBER(11),
+  FOREIGN KEY (catalog_service_sector_id) REFERENCES catalog_service_sector(id)
+);
+
+
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Living Room', 1);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Conference Room', 2);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Private Office', 2);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Dining Room', 1);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Laundry Room', 1);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Bed Room', 1);
+INSERT INTO catalog_service_area (category, catalog_service_sector_id) VALUES ('Kitchen', 1);
+
+
+CREATE TABLE product_category (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  category VARCHAR2(255) NOT NULL,
+  catalog_service_area_id NUMBER(11) NOT NULL,
+  FOREIGN KEY (catalog_service_area_id) REFERENCES catalog_service_area(id)
+);
+
+
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Furniture', 1);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Electronics', 1);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Furniture', 4);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Electronics', 7);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Furniture', 7);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Electronics', 2);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Furniture', 2);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Electronics', 6);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Furniture', 6);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 1);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 4);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 7);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 2);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 6);
+INSERT INTO product_category (category, catalog_service_area_id) VALUES ('Appliances', 6);
+
+CREATE TABLE product_type (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  type VARCHAR2(255),
+  product_category_id NUMBER(11),
+  FOREIGN KEY (product_category_id) REFERENCES product_category (id)
+);
+
+
+INSERT INTO product_type (type, product_category_id) VALUES ('Chair', 1);
+INSERT INTO product_type (type, product_category_id) VALUES ('TV', 2);
+INSERT INTO product_type (type, product_category_id) VALUES ('Sofa', 1);
+INSERT INTO product_type (type, product_category_id) VALUES ('Washing Machine', 16);
+INSERT INTO product_type (type, product_category_id) VALUES ('Table', 1);
+INSERT INTO product_type (type, product_category_id) VALUES ('Bed', 9);
+INSERT INTO product_type (type, product_category_id) VALUES ('Oven', 12);
+INSERT INTO product_type (type, product_category_id) VALUES ('Desk', 7);
+INSERT INTO product_type (type, product_category_id) VALUES ('Mic', 6);
+INSERT INTO product_type (type, product_category_id) VALUES ('Laptop', 6);
+INSERT INTO product_type (type, product_category_id) VALUES ('Dinning Table', 3);
+
+
+CREATE TABLE product (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  color VARCHAR2(255),
+  dimensions VARCHAR2(255),
+  is_available NUMBER(1),
+  is_visible NUMBER(1),
+  name VARCHAR2(255),
+  brand_id NUMBER(11),
+  catalog_service_area_id NUMBER(11),
+  catalog_service_sector_id NUMBER(11),
+  company_id NUMBER(11),
+  material_id NUMBER(11),
+  product_category_id NUMBER(11),
+  product_type_id NUMBER(11),
+  city VARCHAR2(255),
+  image_url VARCHAR2(255),
+  FOREIGN KEY (catalog_service_area_id) REFERENCES catalog_service_area (id),
+  FOREIGN KEY (brand_id) REFERENCES brand (id),
+  FOREIGN KEY (product_category_id) REFERENCES product_category (id),
+  FOREIGN KEY (catalog_service_sector_id) REFERENCES catalog_service_sector (id),
+  FOREIGN KEY (product_type_id) REFERENCES product_type (id),
+  FOREIGN KEY (material_id) REFERENCES material (id)
+);
+
+
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Brown','121 X 121',1,1,'Designer chair',1,1,1,1,1,1,1,'Bangalore','resources/images/products/p1.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Red','121 X 121',1,1,'Recliner',1,1,1,5,1,1,1,'Coimbatore','resources/images/products/p2.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Blue','90 X 60 cm',1,1,'Bosch 6.5Kg Washing Machines',1,5,1,2,2,16,4,'Chennai','resources/images/products/p3.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Dark Brown','H 29 x W 57 x D 33',1,1,'Momoko 6 Seater Dining Set',6,4,1,6,2,3,11,'Trivindrum','resources/images/products/p4.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('White','60 x 78',1,1,'Takai Queen Size Beds',2,6,1,4,2,9,6,'Hydrabad','resources/images/products/p5.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Black','52 x 40.2 x 35.6 cm',1,1,'Philips 25-Litre Digital Oven',8,7,1,4,2,12,7,'Chennai','resources/images/products/p6.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Brown','80 cm (w)  x 192 cm (h)',1,0,'Ebony Wardrobe',8,6,1,3,1,9,6,'Chennai','resources/images/products/p7.png');
+INSERT INTO product (color,dimensions,is_available,is_visible,name,brand_id,catalog_service_area_id,catalog_service_sector_id,company_id,material_id,product_category_id,product_type_id,city,image_url) VALUES ('Black','14 inch',0,1,'Lenovo Ideapad Core i3',8,2,2,8,2,6,10,'Chennai','resources/images/products/p8.png');
+
+CREATE TABLE product_rate (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  end_date TIMESTAMP,
+  rate VARCHAR2(255),
+  start_date TIMESTAMP,
+  product_id NUMBER(11),
+  FOREIGN KEY (product_id) REFERENCES product (id)
+);
+
+
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '1500', TO_TIMESTAMP('2019-10-22 09:37:36', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '1540', TO_TIMESTAMP('2019-10-22 11:11:11', 'YYYY-MM-DD HH24:MI:SS'), 2);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '15000.0', TO_TIMESTAMP('2019-10-22 12:13:45', 'YYYY-MM-DD HH24:MI:SS'), 3);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '28000.0', TO_TIMESTAMP('2019-10-22 12:20:34', 'YYYY-MM-DD HH24:MI:SS'), 4);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '12500.0', TO_TIMESTAMP('2019-10-22 12:27:58', 'YYYY-MM-DD HH24:MI:SS'), 5);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '6000.0', TO_TIMESTAMP('2019-10-22 12:35:30', 'YYYY-MM-DD HH24:MI:SS'), 6);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '7000.0', TO_TIMESTAMP('2019-10-22 12:35:30', 'YYYY-MM-DD HH24:MI:SS'), 7);
+INSERT INTO product_rate (end_date, rate, start_date, product_id) VALUES (NULL, '27000.0', TO_TIMESTAMP('2019-10-22 12:35:30', 'YYYY-MM-DD HH24:MI:SS'), 8);
+
+
+CREATE TABLE rental_package (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(25),
+  is_visible NUMBER(1) NOT NULL,
+  is_available NUMBER(1) NOT NULL,
+  created_date DATE NOT NULL,
+  city VARCHAR2(50) NOT NULL,
+  image_url VARCHAR2(255)
+);
+
+INSERT INTO rental_package (id, name, is_visible, is_available, created_date, city, image_url) VALUES (1, 'Pacakge1', 1, 1, DATE '2018-11-11', 'Bengaluru', 'resources/images/packages/r1.png');
+INSERT INTO rental_package (id, name, is_visible, is_available, created_date, city, image_url) VALUES (2, 'Pacakge2', 1, 1, DATE '2018-08-25', 'Chennai', 'resources/images/packages/r2.png');
+INSERT INTO rental_package (id, name, is_visible, is_available, created_date, city, image_url) VALUES (3, 'Pacakge3', 1, 1, DATE '2018-08-25', 'Chennai', 'resources/images/packages/r3.png');
+
+CREATE TABLE rental_package_rate (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  rental_package_id NUMBER(11) NOT NULL,
+  rate NUMBER(11) NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE,
+  FOREIGN KEY (rental_package_id) REFERENCES rental_package(id)
+);
+
+
+INSERT INTO rental_package_rate (id, rental_package_id, start_date, end_date, rate) VALUES (1, 1, DATE '2016-12-12', NULL, 22500);
+INSERT INTO rental_package_rate (id, rental_package_id, start_date, end_date, rate) VALUES (2, 2, DATE '2018-09-10', NULL, 42040);
+INSERT INTO rental_package_rate (id, rental_package_id, start_date, end_date, rate) VALUES (3, 3, DATE '2018-10-10', NULL, 32040);
+
+CREATE TABLE rental_package_product (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  package_id NUMBER(11) NOT NULL,
+  product_id NUMBER(11) NOT NULL,
+  FOREIGN KEY (package_id) REFERENCES rental_package(id),
+  FOREIGN KEY (product_id) REFERENCES product(id)
+);
+
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (1, 1, 1);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (2, 1, 3);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (3, 1, 6);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (4, 2, 2);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (5, 2, 4);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (6, 2, 5);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (7, 3, 7);
+INSERT INTO rental_package_product (id, package_id, product_id) VALUES (8, 3, 8);
+
+CREATE TABLE order_detail (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  user_id NUMBER(11) NOT NULL,
+  name VARCHAR2(255) NOT NULL,
+  contact_no VARCHAR2(255) NOT NULL,
+  ordered_date DATE NOT NULL,
+  delivery_date DATE NOT NULL,
+  delivery_time VARCHAR2(255) NOT NULL,
+  address_id NUMBER(11) NOT NULL,
+  cost_per_month NUMBER(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES "user" (id),
+  FOREIGN KEY (address_id) REFERENCES address (id)
+);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (1, 2, 'Tina', '7845547896', DATE '2020-03-20', DATE '2020-03-31', '10.00 AM', 2, 2000);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (2, 3, 'Andy', '8974563214', DATE '2020-04-16', DATE '2020-04-21', '12.30 PM', 2, 3000);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (3, 5, 'Jasmin', '7845412365', DATE '2020-03-02', DATE '2020-03-11', '6.00 PM', 5, 2500);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (4, 4, 'Edward', '9874563214', DATE '2019-11-10', DATE '2020-03-18', '4.50 PM', 4, 5000);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (5, 2, 'kiran', '2589631470', DATE '2019-08-14', DATE '2019-08-17', '2:45 PM', 2, 74080);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (6, 2, 'Harry', '5896471230', DATE '2019-05-12', DATE '2019-05-13', '10:45 PM', 13, 15000);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (7, 3, 'Kiran', '8796543210', DATE '2019-08-12', DATE '2019-08-13', '10:45 PM', 14, 74080);
+
+INSERT INTO order_detail (id, user_id, name, contact_no, ordered_date, delivery_date, delivery_time, address_id, cost_per_month) 
+VALUES (8, 3, 'Jeeva', '9876543210', DATE '2019-06-13', DATE '2019-06-13', '6:00 PM', 14, 21000);
+
+CREATE TABLE order_detail_product (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  order_detail_id NUMBER(11) NOT NULL,
+  product_id NUMBER(11) NOT NULL,
+  FOREIGN KEY (order_detail_id) REFERENCES order_detail(id),
+  FOREIGN KEY (product_id) REFERENCES product(id)
+);
+
+INSERT INTO order_detail_product (id, order_detail_id, product_id) VALUES (1, 1, 3);
+INSERT INTO order_detail_product (id, order_detail_id, product_id) VALUES (2, 3, 5);
+INSERT INTO order_detail_product (id, order_detail_id, product_id) VALUES (3, 6, 3);
+INSERT INTO order_detail_product (id, order_detail_id, product_id) VALUES (4, 8, 3);
+INSERT INTO order_detail_product (id, order_detail_id, product_id) VALUES (5, 8, 6);
+
+CREATE TABLE order_detail_rental_package (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  order_detail_id NUMBER(11) NOT NULL,
+  package_id NUMBER(11) NOT NULL,
+  FOREIGN KEY (order_detail_id) REFERENCES order_detail(id),
+  FOREIGN KEY (package_id) REFERENCES rental_package(id)
+);
+
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (1, 2, 1);
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (2, 4, 2);
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (3, 5, 2);
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (4, 5, 3);
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (5, 7, 2);
+INSERT INTO order_detail_rental_package (id, order_detail_id, package_id) VALUES (6, 7, 3);
+
+CREATE TABLE discount (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  tenure NUMBER(11) NOT NULL,
+  percentage NUMBER(11) NOT NULL
+);
+
+INSERT INTO discount (tenure, percentage) VALUES (6, 4);
+INSERT INTO discount (tenure, percentage) VALUES (9, 6);
+INSERT INTO discount (tenure, percentage) VALUES (12, 10);
+
+CREATE TABLE rental_agreement (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  order_detail_id NUMBER(11) NOT NULL,
+  agreement_number VARCHAR2(255) NOT NULL,
+  company_id NUMBER(11) NOT NULL,
+  tenure NUMBER(11) NOT NULL,
+  booked_date DATE NOT NULL,
+  delivery_date DATE NOT NULL,
+  renewal_date DATE NOT NULL,
+  expiry_date DATE NOT NULL,
+  discount_id NUMBER(11) NOT NULL,
+  total_cost NUMBER(11) NOT NULL,
+  FOREIGN KEY (order_detail_id) REFERENCES order_detail(id),
+  FOREIGN KEY (discount_id) REFERENCES discount(id),
+  FOREIGN KEY (company_id) REFERENCES company(id)
+);
+
+INSERT INTO rental_agreement (id, order_detail_id, agreement_number, company_id, tenure, booked_date, delivery_date, renewal_date, expiry_date, discount_id, total_cost) VALUES 
+(1, 5, 'INS5U2V0', 1, 9, TO_DATE('2019-08-14', 'YYYY-MM-DD'), TO_DATE('2019-08-17', 'YYYY-MM-DD'), TO_DATE('2020-05-18', 'YYYY-MM-DD'), TO_DATE('2020-05-17', 'YYYY-MM-DD'), 2, 626717),
+(2, 6, 'INS6U2V0', 1, 6, TO_DATE('2019-05-12', 'YYYY-MM-DD'), TO_DATE('2019-05-13', 'YYYY-MM-DD'), TO_DATE('2019-11-14', 'YYYY-MM-DD'), TO_DATE('2019-11-13', 'YYYY-MM-DD'), 1, 86400),
+(3, 7, 'INS7U3V0', 1, 12, TO_DATE('2019-08-12', 'YYYY-MM-DD'), TO_DATE('2019-08-13', 'YYYY-MM-DD'), TO_DATE('2020-08-14', 'YYYY-MM-DD'), TO_DATE('2020-08-13', 'YYYY-MM-DD'), 3, 800064),
+(4, 8, 'INS8U3V0', 1, 9, TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2020-03-14', 'YYYY-MM-DD'), TO_DATE('2020-03-13', 'YYYY-MM-DD'), 2, 177660),
+(5, 1, 'INS1U2V0', 1, 6, TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2020-03-14', 'YYYY-MM-DD'), TO_DATE('2020-03-13', 'YYYY-MM-DD'), 2, 157660),
+(6, 2, 'INS2U3V0', 1, 9, TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2020-03-14', 'YYYY-MM-DD'), TO_DATE('2020-03-13', 'YYYY-MM-DD'), 2, 167660),
+(7, 3, 'INS3U5V0', 1, 12, TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2020-03-14', 'YYYY-MM-DD'), TO_DATE('2020-03-13', 'YYYY-MM-DD'), 2, 147660),
+(8, 4, 'INS4U4V0', 1, 9, TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2019-06-13', 'YYYY-MM-DD'), TO_DATE('2020-03-14', 'YYYY-MM-DD'), TO_DATE('2020-03-13', 'YYYY-MM-DD'), 2, 189000);
+
+CREATE TABLE schedule_pickup (
+  id NUMBER(11) GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  rental_agreement_id NUMBER(11) NOT NULL,
+  pickup_date DATE NOT NULL,
+  pickup_time VARCHAR2(45) NOT NULL,
+  FOREIGN KEY (rental_agreement_id) REFERENCES rental_agreement(id)
+);
+
+
+
+
+
+
+
